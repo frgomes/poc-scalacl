@@ -1,0 +1,50 @@
+Overview
+--------
+
+This project is a proof of concept (poc) on usage of ScalaCL.
+More information about ScalaCL can be found at:
+
+    http://code.google.com/p/scalacl/
+
+
+Quick installation guide for the impatient
+------------------------------------------
+
+1. Install the compiler plugin
+
+$ cd /whereaver/your/Scala-2.9.1/installation/is
+$ cd bin
+$ ./sbaz install scalacl/0.3-SNAPSHOT-20120110
+
+
+2. Download from github
+
+$ cd /wherever/your/git/repository/is
+$ mkdir -p github/frgomes
+$ cd github/frgomes
+$ git clone http://github.com/frgomes/poc-scalacl
+
+
+3. Run this project
+
+$ cd poc-scalacl
+$ mvn clean test
+
+
+
+Caveats
+-------
+
+Due to code refactoring in project http://github/ochafik/nativelibs4java/, in
+particular on projects ScalaCL  and Scalaxy, we may face crashes when compiling
+or executing the code in this projects.
+
+There's not much we can do at the moment, unless picking a version which works
+well at the time of this build. Once we are using 0.3-SNAPSHOT, a future update
+on the snapshot may break compilation or execution of this project.
+
+Ideally we should choose a release version, but release 0.2 is still to incipient
+to be considered for serious purposes.
+
+
+-- Richard Gomes

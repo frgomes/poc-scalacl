@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>frgomes</groupId>
+    <artifactId>poc-scalacl</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <repositories>
+        <repository>
+            <id>sonatype</id>
+            <name>Sonatype OSS Snapshots Repository</name>
+            <url>http://oss.sonatype.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>nativelibs4java-repo</id>
+            <url>http://nativelibs4java.sourceforge.net/maven</url>
+        </repository>
+    </repositories>
+
+    <properties>
+        <scala.version>2.9.1</scala.version>
+        <scalacl.version>0.3-SNAPSHOT</scalacl.version>
+        <junit.version>4.8.2</junit.version>
+        <ostermiller-utils.version>1.07.00</ostermiller-utils.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.nativelibs4java</groupId>
+            <artifactId>javacl</artifactId>
+            <version>1.0.0-RC1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.nativelibs4java</groupId>
+            <artifactId>scalacl</artifactId>
+            <version>${scalacl.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.ostermiller</groupId>
+            <artifactId>utils</artifactId>
+            <version>${ostermiller-utils.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--
+            //// Only needed on Java/Scala mixed projects ////
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test/scala</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/scala</source>
+                                <source>src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>${scala.version}</version>
+                <executions>
+                    <!-- hack: forcing scala compile 'before' java compile
+                    ==== http://www.mail-archive.com/liftweb@googlegroups.com/msg03449.html
+                    -->
+                    <execution>
+                        <id>scala-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <compilerPlugins>
+                        <compilerPlugin>
+                            <groupId>com.nativelibs4java</groupId>
+                            <artifactId>scalacl-compiler-plugin</artifactId>
+                            <version>${scalacl.version}</version>
+                        </compilerPlugin>
+                    </compilerPlugins>
+                    <args>
+                        <arg>-optimize</arg>
+                    </args>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>${scala.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>
