@@ -17,9 +17,9 @@ Quick installation guide for the impatient
 
 1. Install the compiler plugin
 
-$ cd /whereaver/your/Scala-2.9.1/installation/is
+$ cd /whereaver/your/Scala-2.9.1/installation/is  # Scala 2.9.1, please
 $ cd bin
-$ ./sbaz install scalacl/0.3-SNAPSHOT-20120110
+$ ./sbaz install scalacl/0.3-SNAPSHOT-20120110    # 2012-01-10, please
 
 
 2. Download from github
@@ -33,7 +33,131 @@ $ git clone http://github.com/frgomes/poc-scalacl
 3. Run this project
 
 $ cd poc-scalacl
-$ mvn clean test
+$ mvn clean test  # this will take a while
+
+
+If you found troubles of if your tests look to never finish, please read sections
+"Requirements" and "Installation" below.
+
+
+
+Requirements
+============
+
+1. You need at least one OpenCL enabled graphics card.
+   See: http://en.wikipedia.org/wiki/OpenCL
+
+   Caveat: it's better to match endianess of your computer and your
+   graphics card. This is not an strict requirement, but it helps if
+   you are willing to eliminate steps during your evaluations.
+   See: http://en.wikipedia.org/wiki/Endianness
+
+   I recommend a Nvidia GeForce GTX 460 for the i386 architecturea, like
+   most regular PCs and modern Macs. This graphics card is cheap and has
+   more than 300 PE (processing elements, or cores), which is plenty enough
+   for our purposes.
+
+
+2. You need JDK 6 and Scala 2.9.1
+
+   Beware that Scala 2.9.2 had "Scala Tools" removed from the package.
+   Installing a separate Scala Tools is beyond the objectives of this
+   manual. In this case, we recommend Scala 2.9.1
+
+
+Installation
+============
+
+Now you can jump to the "Quick installation guide for the impatient".
+
+
+
+Other Considerations
+====================
+
+
+1. Tooling: stay in control of everything!
+
+   Consider installation of tools in a fashion absolutely independent of
+   operating system tools. Do not install Java, Ant, Maven, etc via
+   package managers of your operating system. Keep your development
+   environment absolutely separated.
+
+   The recommendation is: download all tools you need and install under
+   a specific directory structure. If you are using Windoze (poor you!),
+   beware of spaces in directories and file names, Will Robinson!
+
+   Below you see my configuration:
+
+
+   export JavaDEV=/opt/java-dev
+   
+   export ANT_VERSION=1.8.2
+   export M3_VERSION=3.0.4
+   export GRADLE_VERSION=1.0
+   export JAVA_VERSION=1.6.0_31
+   export SCALA_VERSION=2.9.1.final
+
+   export ANT_HOME=${JavaDEV}/apache-ant-${ANT_VERSION}
+   export M3_HOME=${JavaDEV}/apache-maven-${M3_VERSION}
+   export GRADLE_HOME=${JavaDEV}/gradle-${GRADLE_VERSION}
+   export JAVA_HOME=${JavaDEV}/jdk${JAVA_VERSION}-linux-x86_64
+   export SCALA_HOME=${JavaDEV}/scala-${SCALA_VERSION}
+
+   export PATH=${PATH}:${SCALA_HOME}/bin:${JAVA_HOME}/bin:${GRADLE_HOME}/bin:${M3_HOME}/bin:${ANT_HOME}/bin
+
+
+2. Memory considerations
+
+   This project has performance tests which may take a while to execute.
+   The more available memory you have in your computer, the better.
+   The more memory you have in your graphics card, the better.
+
+   Once you start playing with the sources, you will find implementations
+   which demand better memory bandwidth from your computer or may demand
+   a better graphics card.
+
+   You will always find one bottleneck in your stress tests. Once you
+   replace that piece of hardware or change the algorithm to circumvent
+   that limitation, chances are you will have something running faster
+   but now limited by another bottleneck.
+
+   Anyway, plenty of memory is always a good thing.
+
+
+3. Stress tests, bottlenecks
+
+   The command "mvn clean test" may take a while the first time you run
+   it, due to Maven downloading all dependencies you need.
+
+   Next time you run, it will take one minute to complete or so.
+   We are doing some basic matrix operations, from a matrix read from a
+   CSV file made of 200 col X 1000 rows.
+
+   Purposedly, I removed from sources some calculations which were
+   taking more than more than 30 mins to complete in my old PC. I was
+   calculating a 200x200 correlation matrix, were each cell is made
+   of 1000 data points. I've created different implementations for that
+   and I managed to reduce execution time to 6 mins, but I'm sure that
+   there's lot of room for improvement yet.
+
+   I've observed that my graphics card is still pretty much idle, despite
+   of the relatively high workload. It means that my implementation is
+   still struggling to use all resources available in the graphics card.
+
+   There's one advantage of using an old PC: an old CPU with old memory
+   modules will not help you anyhow if your implementation is poor.
+   Only a good implementation, which uses memory bandwidth economically,
+   employs CPU economically and pushes most of computation onto the GPU,
+   will be able to perform properly.
+
+
+4. Operating system considerations
+
+   Finally, if you are serions about HPC, consider an operating system
+   you can tweak all parameters you wish. This is not a critical factor
+   if you are a newbie on the subject, but can make a lot of difference
+   if you are serious about HPC.
 
 
 
@@ -41,15 +165,14 @@ Caveats
 -------
 
 Due to code refactoring in project http://github/ochafik/nativelibs4java/, in
-particular on projects ScalaCL  and Scalaxy, we may face crashes when compiling
-or executing the code in this projects.
+particular on projects ScalaCL  and Scalaxy, you may face crashes when compiling
+or executing code from these projects.
 
-There's not much we can do at the moment, unless picking a version which works
-well at the time of this build. Once we are using 0.3-SNAPSHOT, a future update
-on the snapshot may break compilation or execution of this project.
+There's not much you can do at the moment, unless picking a version which works
+well at the time it was built. Once we are using 0.3-SNAPSHOT, an update in the
+future may break the "SNAPSHOT" version. For this reason, the installatin
+instructions recommend a very specific version, with a certain date.
 
-Ideally we should choose a release version, but release 0.2 is still to incipient
-to be considered for serious purposes.
 
 
 -- Richard Gomes
